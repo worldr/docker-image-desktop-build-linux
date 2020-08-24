@@ -1,0 +1,34 @@
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v3.2.0
+  hooks:
+  # Git state
+  - id: check-merge-conflict
+    stages: [commit]
+  - id: check-added-large-files
+    stages: [commit]
+  # Sensitive information
+  - id: detect-private-key
+    stages: [commit]
+  # Generic file state
+  - id: trailing-whitespace
+    stages: [commit]
+  - id: mixed-line-ending
+    stages: [commit]
+  - id: end-of-file-fixer
+    stages: [commit]
+  - id: check-executables-have-shebangs
+    stages: [commit]
+  # Language syntax/formatting
+  - id: check-yaml
+    stages: [commit]
+  - id: check-json
+    stages: [commit]
+  - id: pretty-format-json
+    stages: [commit]
+    args:
+      - --autofix
+- repo: https://github.com/pryorda/dockerfilelint-precommit-hooks
+  rev: v0.1.0
+  hooks:
+  - id: dockerfilelint

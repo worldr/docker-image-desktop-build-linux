@@ -1,0 +1,31 @@
+name: release-workflow
+on:
+  push:
+    tags:
+      - '*'
+env:
+  COMPOSE_PROJECT_NAME: "circleci"
+jobs:
+  build-pack-release:
+    name: build-pack-release
+    runs-on: windows-latest
+    env:
+      DOCKER_BUILDKIT: 1
+      COMPOSE_DOCKER_CLI_BUILD: 1
+      REGISTRY_PATH: ${{secrets.DOCKER_HUB_PATH}}
+      REGISTRY_HOST: ${{secrets.DOCKER_HUB_HOST}}
+      DOCKER_REGISTRY_USERNAME: ${{secrets.DOCKER_HUB_USERNAME}}
+    steps:
+      - name: Checkout code.
+        uses: actions/checkout@master
+      - name: Define tag.
+        run:  echo "::set-env name=RELEASE_TAG::$(git describe --tags)"
+      - name: Docker Hub registry login.
+        run:  docker login --username $DOCKER_REGISTRY_USERNAME --password ${{secrets.DOCKER_HUB_PASSWORD}}
+      - name: Build the LaTeX image.
+        run: |
+          docker build -t ${REGISTRY_PATH}/desktop-build-linux:${RELEASE_TAG} -t ${REGISTRY_PATH}/desktop-build-linux:latest -f Dockerfile .
+      - name: Release LaTeX image.
+        run: |
+          docker push ${REGISTRY_PATH}/desktop-build-linux:${RELEASE_TAG}
+          docker push ${REGISTRY_PATH}/desktop-build-linux:latest
