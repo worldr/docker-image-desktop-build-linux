@@ -8,7 +8,7 @@ env:
 jobs:
   build-pack-release:
     name: build-pack-release
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     env:
       DOCKER_BUILDKIT: 1
       COMPOSE_DOCKER_CLI_BUILD: 1
@@ -22,10 +22,10 @@ jobs:
         run:  echo "::set-env name=RELEASE_TAG::$(git describe --tags)"
       - name: Docker Hub registry login.
         run:  docker login --username $DOCKER_REGISTRY_USERNAME --password ${{secrets.DOCKER_HUB_PASSWORD}}
-      - name: Build the LaTeX image.
+      - name: Build the Linux image.
         run: |
           docker build -t ${REGISTRY_PATH}/desktop-build-linux:${RELEASE_TAG} -t ${REGISTRY_PATH}/desktop-build-linux:latest -f Dockerfile .
-      - name: Release LaTeX image.
+      - name: Release Linux image.
         run: |
           docker push ${REGISTRY_PATH}/desktop-build-linux:${RELEASE_TAG}
           docker push ${REGISTRY_PATH}/desktop-build-linux:latest

@@ -10,7 +10,7 @@ Docker image for Linux builds.
   + jq
   + git
   + openssl
-  + python
+  + openssh, server and client
   + flutter
   + hover-shim
 
