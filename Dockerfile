@@ -16,7 +16,10 @@ RUN set -ex \
          unzip \
          xorg-dev \
     # Install Flutter BETA via git.
-    && git clone --single-branch --depth=1 --branch beta https://github.com/flutter/flutter ~/flutter \
+    && git clone --single-branch --depth=1 --branch master https://github.com/flutter/flutter ~/flutter \
+    && cd ~/flutter \
+    && git checkout 8e7748e74c1454edad6caa3e418db82a9f332680 \
+    && cd ~ \
     # Install hover-shim.
     && GO111MODULE=on go get -u -a github.com/worldr/hover-shim \
     # Remove lots of unnecessary stuff.
